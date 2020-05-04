@@ -1,0 +1,40 @@
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@master
+      - name: Cache .cache folder
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-proj-public
+        with:
+          key: ${{ runner.os }}-cache
+          path: ${{ github.workspace }}/.cache
+      - name: Cache public folder
+        uses: actions/cache@v1
+        env:
+          cache-name: cache-proj-public
+        with:
+          key: ${{ runner.os }}-public
+          path: ${{ github.workspace }}/public
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: NPM ci
+        run: 'npm ci'
+      - name: Build app
+        run: 'npm run build:incremental'
+      - name: Publish app
+        uses: cloudflare/wrangler-action@1.1.0
+        with:
+          apiToken: ${{ secrets.apiToken }}

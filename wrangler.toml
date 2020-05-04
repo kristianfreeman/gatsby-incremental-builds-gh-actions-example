@@ -1,0 +1,8 @@
+name = "gatsby-incremental-builds-gh-actions-example"
+type = "webpack"
+account_id = "dc56444c4c955a1653106ccf997c1067"
+workers_dev = true
+
+[site]
+bucket = "./public"
+entry-point = "workers-site"
