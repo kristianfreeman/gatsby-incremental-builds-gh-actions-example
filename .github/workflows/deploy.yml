@@ -12,16 +12,16 @@ jobs:
       - name: Cache .cache folder
         uses: actions/cache@v1
         env:
-          cache-name: cache-proj-public
+          cache-name: cache-proj
         with:
-          key: ${{ runner.os }}-cache
+          key: proj-cache-${{ hashFiles('.cache/newPages.txt') }}
           path: ${{ github.workspace }}/.cache
       - name: Cache public folder
         uses: actions/cache@v1
         env:
-          cache-name: cache-proj-public
+          cache-name: cache-proj
         with:
-          key: ${{ runner.os }}-public
+          key: proj-public-${{ hashFiles('.cache/newPages.txt') }}
           path: ${{ github.workspace }}/public
       - name: Cache node modules
         uses: actions/cache@v1
